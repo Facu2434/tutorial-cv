@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorial CV</title>
+<style>
+        :root {
+            --bg-body: #e2e8f0;
+            --card-bg: #ffffff;
+            --dark-bg: #1e293b;
+            --text-main: #334155;
+            --text-light: #64748b;
+            --accent-blue: #1d4ed8;
+            --accent-blue-light: #eff6ff;
+            --accent-hover: #1e40af;
+            --accent-green: #059669;
+            --accent-green-light: #ecfdf5;
+            --accent-red: #dc2626;
+            --accent-red-light: #fef2f2;
+            --accent-amber: #b45309;
+            --accent-amber-light: #fffbeb;
+            --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        [hidden] { display: none !important; }
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.5;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 1050px;
+            height: 88vh;
+            min-height: 560px;
+            max-height: 820px;
+            background-color: var(--card-bg);
+            box-shadow: 0 20px 40px -10px rgba(30, 41, 59, 0.1), 0 10px 20px -5px rgba(30, 41, 59, 0.05);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            border-top: 6px solid var(--accent-blue);
+        }
+        .topbar {
+            display: flex; justify-content: space-between; align-items: center; gap: 12px;
+            padding: 11px 28px; border-bottom: 1px solid #f1f5f9;
+            font-size: .85rem; font-weight: 600; color: var(--text-light);
+        }
+        .topbar b { color: var(--dark-bg); font-weight: 800; }
+        .pie {
+            text-align: center; font-size: .8rem; color: var(--text-light);
+            padding: 8px 14px 12px; background: #fff;
+        }
+        .pie a { color: inherit; }
+
+        /* Pantallas */
+        .screen {
+            display: none; flex-direction: column; flex-grow: 1; min-height: 0;
+            padding: 32px 56px; overflow-y: auto;
+            animation: slideUpFade .5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            justify-content: flex-start;
+        }
+        .screen.active { display: flex; }
+        .screen > :first-child { margin-top: auto; }
+        .screen > :last-child { margin-bottom: auto; }
+        .screen.top > :first-child { margin-top: 0; }
+        .screen > * { flex-shrink: 0; }
+        .screen::-webkit-scrollbar { width: 6px; }
+        .screen::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        @keyframes slideUpFade { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+        .title { font-size: clamp(2.2rem, 4.6vw, 3.2rem); font-weight: 800; margin-bottom: 16px; color: var(--dark-bg); line-height: 1.1; letter-spacing: -1px; }
+        .title.sm { font-size: clamp(1.7rem, 3.4vw, 2.3rem); margin-bottom: 10px; }
+        .subtitle { font-size: clamp(1.2rem, 2.6vw, 1.55rem); color: var(--text-light); margin-bottom: 26px; font-weight: 500; }
+        .subtitle.sm { font-size: clamp(1.05rem, 2.1vw, 1.3rem); margin-bottom: 18px; }
+        .eyebrow {
+            display: inline-block; align-self: flex-start; background: var(--accent-blue-light); color: var(--accent-blue);
+            font-weight: 800; font-size: .9rem; letter-spacing: 1px; text-transform: uppercase;
+            padding: 6px 14px; border-radius: 20px; margin-bottom: 14px;
+        }
+        .eyebrow.annex { background: var(--accent-amber-light); color: var(--accent-amber); }
+        .center-screen { text-align: center; align-items: center; }
+        .center-screen .eyebrow { align-self: center; }
+        .center-screen .title { text-align: center; }
+
+        .highlight-box {
+            background-color: var(--accent-blue-light); border-left: 6px solid var(--accent-blue);
+            padding: 26px 28px; border-radius: 0 16px 16px 0;
+            font-size: clamp(1.3rem, 2.8vw, 1.7rem); color: #1e3a8a; font-weight: 700; margin-top: 26px; line-height: 1.4; text-align: left;
+        }
+        .highlight-small { padding: 18px 22px; font-size: clamp(1.05rem, 2.1vw, 1.3rem); margin-top: 20px; }
+
+        .icon-box {
+            display: flex; align-items: center; justify-content: center; width: 48px; height: 48px;
+            border-radius: 12px; background-color: var(--accent-blue-light); color: var(--accent-blue); flex-shrink: 0;
+        }
+        .parts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-top: 6px; }
+        .parts-grid.two { grid-template-columns: 1fr 1fr; }
+        .part-card { background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 16px; padding: 22px; display: flex; align-items: flex-start; gap: 18px; }
+        .part-card .icon-box { background: var(--dark-bg); color: #fff; }
+        .part-card h3 { font-size: 1.35rem; color: var(--dark-bg); margin-bottom: 4px; }
+        .part-card p { font-size: 1.08rem; color: var(--text-light); }
+        .part-card a { color: var(--accent-blue); font-weight: 700; }
+
+        .icon-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 8px; }
+        .icon-card { background: #fff; border: 2px solid #e2e8f0; border-radius: 16px; padding: 24px 14px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; }
+        .icon-card .icon-box { width: 60px; height: 60px; }
+        .icon-card h3 { font-size: 1.15rem; color: var(--text-main); line-height: 1.3; }
+
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
+        .comparison-grid.one { grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 0; }
+        .annex-row .compare-content { padding: 14px 16px; gap: 8px; }
+        .annex-row .mini-list { gap: 8px; }
+        .annex-row .mini-list li { font-size: 1rem; }
+        .annex-row .compare-label { padding: 10px; font-size: 1rem; }
+        .compare-card { background: #fff; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,.08); border: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column; }
+        .compare-label { text-align: center; font-weight: 800; padding: 13px; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 1px; color: #fff; }
+        .label-gray { background: var(--text-light); }
+        .label-blue { background: var(--accent-blue); }
+        .compare-content { padding: 22px 22px; display: flex; flex-direction: column; gap: 12px; flex-grow: 1; background: #f8fafc; }
+        .mini-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+        .mini-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 1.08rem; line-height: 1.4; }
+        .mini-list li svg { flex-shrink: 0; margin-top: 2px; color: var(--accent-blue); }
+        .label-gray + .compare-content .mini-list li svg { color: var(--accent-red); }
+
+        .concept-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+        .concept-list li { font-size: clamp(1.15rem, 2.3vw, 1.45rem); display: flex; align-items: center; gap: 18px; background: #f8fafc; padding: 12px 18px; border-radius: 16px; border: 1px solid #f1f5f9; }
+
+        .step-list { list-style: none; display: flex; flex-direction: column; gap: 14px; counter-reset: stepc; }
+        .step-list li { counter-increment: stepc; display: flex; align-items: flex-start; gap: 18px; background: #f8fafc; border: 1px solid #f1f5f9; border-radius: 16px; padding: 16px 20px; }
+        .step-list li::before { content: counter(stepc); flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; background: var(--dark-bg); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem; }
+        .step-list.compact { gap: 8px; }
+        .step-list.compact li { padding: 9px 16px; }
+        .step-list.compact span { font-size: clamp(1.05rem, 2vw, 1.25rem); }
+        .step-list span { font-size: clamp(1.1rem, 2.2vw, 1.4rem); padding-top: 5px; line-height: 1.4; }
+
+        .src-note { font-size: .92rem; color: var(--text-light); margin-top: 14px; }
+        .src-note a { color: var(--accent-blue); font-weight: 700; }
+        .zoom-hint { font-size: .88rem; color: var(--text-light); margin-top: 8px; }
+        .check-label { font-size: .85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin: 18px 0 8px; }
+        .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+        .chip { display: inline-flex; align-items: center; gap: 8px; background: var(--accent-green-light); color: var(--accent-green); font-weight: 700; border-radius: 999px; padding: 8px 14px; font-size: 1rem; }
+
+        /* Miniaturas de CV */
+        figure { margin: 0; min-width: 0; }
+        figcaption { font-size: .95rem; color: var(--text-main); margin-top: 8px; line-height: 1.35; }
+        .two-shots { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+        .two-shots.tiny { gap: 14px; }
+        .thumb { border: 1px solid #cbd5e1; border-radius: 10px; overflow: hidden; line-height: 0; cursor: zoom-in; background: #fff; box-shadow: 0 10px 22px -12px rgba(15,23,42,.45); }
+        .thumb img { width: 100%; height: auto; display: block; }
+        .thumb.big { max-width: 270px; margin: 0 auto; }
+        .models { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+        .model { border: 2px solid #e2e8f0; border-radius: 16px; padding: 12px; background: #f8fafc; }
+        .model-h { display: flex; flex-direction: column; margin-bottom: 10px; }
+        .model-h b { font-size: 1.1rem; color: var(--dark-bg); }
+        .model-h span { font-size: .9rem; color: var(--text-light); line-height: 1.25; min-height: 2.3em; }
+        .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .pair figcaption { font-size: .85rem; text-align: center; margin-top: 6px; color: var(--text-light); }
+        .annex-row { display: grid; grid-template-columns: 2.2fr 1fr; gap: 26px; align-items: start; margin-top: 16px; }
+
+        /* Paso a paso */
+        .tabs { display: flex; gap: 10px; margin: 4px 0 14px; }
+        .tab { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-weight: 800; font-size: 1.05rem; padding: 9px 18px; border-radius: 12px; border: 2px solid #e2e8f0; background: #fff; color: var(--text-light); cursor: pointer; transition: all .2s; }
+        .tab:hover { border-color: #cbd5e1; color: var(--text-main); }
+        .tab.on { background: var(--dark-bg); border-color: var(--dark-bg); color: #fff; }
+        .step { display: none; }
+        .step.on { display: grid; grid-template-columns: 1fr 1.75fr; gap: 26px; align-items: center; }
+        .step-lab { display: inline-block; font-size: .82rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--accent-amber); background: var(--accent-amber-light); padding: 4px 12px; border-radius: 16px; margin-bottom: 10px; }
+        .step h3 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); color: var(--dark-bg); margin-bottom: 8px; line-height: 1.2; }
+        .step p { font-size: clamp(1.08rem, 2vw, 1.3rem); line-height: 1.45; }
+        .step p b { color: var(--accent-blue); }
+        .tip { display: flex; gap: 10px; align-items: flex-start; background: var(--accent-amber-light); color: var(--accent-amber); border-radius: 12px; padding: 10px 14px; margin-top: 14px; font-size: 1rem; font-weight: 600; }
+        .tip svg { flex-shrink: 0; margin-top: 2px; }
+        .tip-soft { background: transparent; color: var(--text-light); padding: 0; margin-top: 10px; font-weight: 500; }
+        .slot { position: relative; }
+        .slot img, .slot svg { display: block; width: 100%; height: auto; border-radius: 12px; border: 1px solid #cbd5e1; box-shadow: 0 14px 30px -14px rgba(15,23,42,.45); }
+        .slot img { cursor: zoom-in; }
+        .slot img + .schem { display: none; }
+        .slot.real img { max-height: 330px; width: auto; max-width: 100%; margin: 0 auto; }
+        .shot-cap { display: block; font-size: .82rem; color: var(--text-light); margin-top: 6px; line-height: 1.3; }
+        .dots { display: flex; gap: 10px; justify-content: center; margin-top: 16px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: #cbd5e1; border: none; cursor: pointer; padding: 0; transition: all .2s; }
+        .dot.on { background: var(--accent-blue); transform: scale(1.3); }
+
+        /* Esquemas SVG */
+        .sv-bg { fill: #e8edf3; stroke: #cbd5e1; }
+        .sv-bar { fill: #fff; stroke: #e2e8f0; }
+        .sv-bar2 { fill: #f8fafc; stroke: #e2e8f0; }
+        .sv-rib { fill: #f8fafc; stroke: #e2e8f0; }
+        .sv-ico { fill: #e2e8f0; }
+        .sv-hl { fill: none; stroke: #f59e0b; stroke-width: 3; }
+        .sv-t { font: 600 13px system-ui, sans-serif; fill: #475569; }
+        .sv-tb { fill: #1d4ed8; font-weight: 800; }
+        .sv-ctx { fill: #047857; }
+        .sv-act { fill: #dbeafe; }
+        .sv-ribbtn { fill: #fff; stroke: #cbd5e1; }
+        .sv-crumb { font: 700 13px system-ui, sans-serif; fill: #1d4ed8; }
+        .sv-page { fill: #fff; stroke: #cbd5e1; }
+        .sv-name { font: 800 20px system-ui, sans-serif; fill: #1e293b; }
+        .sv-sub { font: 600 13px system-ui, sans-serif; fill: #1d4ed8; }
+        .sv-dash { fill: none; stroke: #94a3b8; stroke-width: 2; stroke-dasharray: 6 6; }
+        .sv-menu { fill: #fff; stroke: #cbd5e1; filter: drop-shadow(0 4px 6px rgba(15,23,42,.18)); }
+        .sv-cell { fill: #fff; stroke: #cbd5e1; }
+        .sv-cell-on { fill: #93c5fd; stroke: #1d4ed8; }
+        .sv-nf { fill: none; }
+        .sv-bon { stroke: #1e293b; stroke-width: 1.6; fill: none; }
+        .sv-boff { stroke: #cbd5e1; stroke-width: 1; stroke-dasharray: 3 4; fill: none; }
+        .sv-shade { fill: #dbe7ff; }
+        .sv-h { font: 800 9.5px system-ui, sans-serif; fill: #1d4ed8; }
+        .sv-line { fill: #cbd5e1; }
+        .sv-ghost { stroke: #94a3b8; stroke-width: 1.5; stroke-dasharray: 5 5; }
+        .sv-hlline { stroke: #f59e0b; stroke-width: 3; }
+        .sv-arrow { stroke: #f59e0b; stroke-width: 3; }
+        .sv-arrowh { fill: #f59e0b; }
+        .sv-pin { fill: #f59e0b; stroke: #fff; stroke-width: 3; }
+        .sv-pint { font: 900 14px system-ui, sans-serif; fill: #1e293b; text-anchor: middle; }
+        .sv-tip { fill: #1e293b; }
+        .sv-tipt { font: 700 12px system-ui, sans-serif; fill: #fff; }
+        .sv-panel { fill: #fff; stroke: #cbd5e1; filter: drop-shadow(0 4px 8px rgba(15,23,42,.2)); }
+        .sv-input { fill: #fff; stroke: #cbd5e1; }
+        .sv-btn { fill: #1d4ed8; }
+        .sv-btn-t { font: 800 13px system-ui, sans-serif; fill: #fff; }
+
+        /* Barra de navegacion */
+        .nav-bar { background: #fff; border-top: 1px solid #f1f5f9; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+        .step-counter { font-size: 1.05rem; font-weight: 700; color: #94a3b8; background: #f1f5f9; padding: 8px 16px; border-radius: 20px; white-space: nowrap; }
+        .btn { background-color: var(--dark-bg); color: #fff; border: none; padding: 12px 26px; border-radius: 12px; font-size: 1.15rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; font-family: inherit; transition: all .2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-prev { background: transparent; color: var(--text-light); border: 2px solid #e2e8f0; }
+        .btn-prev:hover:not(:disabled) { background: #f8fafc; color: var(--text-main); border-color: #cbd5e1; }
+        .btn-next { background-color: var(--accent-blue); }
+        .btn-next:hover:not(:disabled) { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(29, 78, 216, .2); }
+        .btn:disabled { opacity: .35; cursor: default; }
+
+        /* Zoom */
+        .lightbox { display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, .88); z-index: 500; align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
+        .lightbox.open { display: flex; }
+        .lightbox .shot { line-height: 0; border-radius: 12px; overflow: hidden; border: 1px solid #cbd5e1; background: #fff; }
+        .lightbox img { display: block; max-height: 92vh; max-width: 96vw; width: auto; height: auto; }
+
+        @media (max-width: 960px) { .models { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 768px) {
+            .app-container { height: 96vh; border-radius: 16px; }
+            body { padding: 10px; }
+            .screen { padding: 22px 20px; }
+            .topbar { padding: 9px 16px; font-size: .75rem; }
+            .parts-grid, .parts-grid.two, .comparison-grid, .comparison-grid.one, .icon-grid, .models, .annex-row, .step.on { grid-template-columns: 1fr; gap: 14px; }
+            .icon-card { flex-direction: row; text-align: left; padding: 14px; }
+            .nav-bar { padding: 10px 12px; }
+            .btn { padding: 10px 14px; font-size: 1rem; }
+            .step-counter { font-size: .85rem; padding: 6px 10px; }
+            .pie { font-size: .72rem; }
+            .two-shots { gap: 12px; }
+        }
+
+</style>
+</head>
+<body>
+<div class="app-container">
+  <header class="topbar"><span><b>Escuela de Educación Media N° 3 D.E. 19 "Carlos Geniso"</b></span><span>Tutorial CV</span></header>
+  <section class="screen center-screen" id="s1">
+<span class="eyebrow">Tutorial</span>
+<h1 class="title">Cómo armar tu CV</h1>
+<p class="subtitle">Qué incluir, cómo escribirlo y cómo darle formato.</p>
+<div class="highlight-box">Que se entienda en 5 segundos quién sos y qué sabés hacer.</div>
+<p class="src-note">Al final hay cuatro anexos cortos: foto, perfil online, carta de presentación y CV con IA.</p>
+</section><section class="screen " id="s2">
+<span class="eyebrow">Para empezar</span>
+<h2 class="title">Qué es un CV</h2>
+<p class="subtitle">Un documento de una hoja con tus datos, tus habilidades y tu experiencia.</p>
+<div class="icon-grid">
+  <div class="icon-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div><h3>Se envía por mail</h3></div>
+  <div class="icon-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div><h3>Se deja impreso</h3></div>
+  <div class="icon-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h3>Se carga en sitios de empleo</h3></div>
+</div>
+<div class="highlight-box highlight-small">Máximo una hoja. Es tu primera impresión.</div>
+</section><section class="screen top" id="s3">
+<span class="eyebrow">Dos CV, dos resultados</span>
+<h2 class="title">Desordenado o claro</h2>
+<div class="comparison-grid">
+  <div class="compare-card"><div class="compare-label label-gray">CV desordenado</div>
+    <div class="compare-content"><ul class="mini-list">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Texto corrido, sin secciones.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Datos que no suman: fecha de nacimiento, jardín de infantes, el perro, los videojuegos.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Tono informal y mail poco profesional.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Experiencias sin resultados concretos.</span></li>
+    </ul></div></div>
+  <div class="compare-card"><div class="compare-label label-blue">CV claro</div>
+    <div class="compare-content"><ul class="mini-list">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Secciones marcadas, con espacio entre bloques.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Perfil breve con el objetivo.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Experiencia y habilidades en viñetas, con palabras clave.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Contacto completo y profesional.</span></li>
+    </ul></div></div>
+</div>
+<div class="highlight-box highlight-small">Lo que no aporta al trabajo buscado resta valor, aunque sea cierto.</div>
+</section><section class="screen top" id="s4">
+<span class="eyebrow">La estructura</span>
+<h2 class="title">Las 4 partes</h2>
+<div class="parts-grid two">
+  <div class="part-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><h3>Datos y perfil</h3><p>Teléfono, mail profesional y zona. Dos o tres líneas sobre lo que podés aportar.</p></div></div>
+  <div class="part-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><div><h3>Experiencia</h3><p>Trabajos o experiencias concretas, en viñetas. Sirven un negocio familiar o una actividad del colegio.</p></div></div>
+  <div class="part-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg></div><div><h3>Educación</h3><p>Colegio, título en curso o terminado y cursos extra que sumen.</p></div></div>
+  <div class="part-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div><div><h3>Habilidades</h3><p>Herramientas y aptitudes que realmente manejás: caja, Excel, atención al público, Canva.</p></div></div>
+</div>
+<p class="src-note">También pueden ir cursos e idiomas.</p>
+</section><section class="screen top" id="s5">
+<span class="eyebrow">Datos personales</span>
+<h2 class="title">Qué va y qué no</h2>
+<div class="comparison-grid">
+  <div class="compare-card"><div class="compare-label label-blue">Sí</div><div class="compare-content">
+    <ul class="mini-list">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Nombre y teléfono.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Mail con tu nombre, sin apodos.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Barrio o zona.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Perfil breve.</span></li>
+    </ul></div></div>
+  <div class="compare-card"><div class="compare-label label-gray">No</div><div class="compare-content">
+    <ul class="mini-list">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>DNI.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Edad y estado civil.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Dirección exacta.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Foto, salvo que el aviso la pida (ver Anexo A).</span></li>
+    </ul></div></div>
+</div>
+</section><section class="screen top" id="s6">
+<span class="eyebrow">Redacción</span>
+<h2 class="title">Cómo escribirlo</h2>
+<div class="comparison-grid">
+  <div class="compare-card"><div class="compare-label label-blue">Hacelo así</div><div class="compare-content">
+    <ul class="mini-list">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Una sola hoja como máximo.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Viñetas cortas, no párrafos largos.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Negrita solo en herramientas, puestos y logros.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Lo más reciente primero.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Palabras clave del aviso. Adaptá el CV a cada puesto.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Ortografía revisada varias veces.</span></li>
+    </ul></div></div>
+  <div class="compare-card"><div class="compare-label label-gray">Evitá</div><div class="compare-content">
+    <ul class="mini-list">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Más de una hoja.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Mails con apodos.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Letra difícil de leer o demasiados colores.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Datos desactualizados.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Escribir sin claridad: si no se entiende en 5 segundos, suele descartarse.</span></li>
+    </ul></div></div>
+</div>
+</section><section class="screen top" id="s7">
+<span class="eyebrow">Filtro automático</span>
+<h2 class="title">El ATS</h2>
+<p class="subtitle">Un programa que muchas empresas usan para escanear los CV antes de que los lea una persona. Busca las palabras clave del aviso.</p>
+<div class="comparison-grid">
+  <div class="compare-card"><div class="compare-label label-blue">Ayuda</div><div class="compare-content">
+    <ul class="mini-list">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Títulos estándar: "Experiencia", "Educación".</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Palabras clave tomadas del aviso.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Tareas concretas en viñetas.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Herramientas con su nombre: Excel, Canva.</span></li>
+    </ul></div></div>
+  <div class="compare-card"><div class="compare-label label-gray">Rompe la lectura</div><div class="compare-content">
+    <ul class="mini-list">
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Diseños recargados.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Columnas múltiples, en sistemas más antiguos.</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Barras de nivel. Mejor en texto: "Nivel básico".</span></li>
+      <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Texto dentro de imágenes.</span></li>
+    </ul></div></div>
+</div>
+<div class="highlight-box highlight-small">Por eso la versión de una columna es la más segura para cargar en sitios de empleo.</div>
+</section><section class="screen top" id="s8">
+<span class="eyebrow">Formato</span>
+<h2 class="title">Una columna o dos</h2>
+<p class="subtitle">Mismo CV, presentado de dos maneras.</p>
+<div class="two-shots">
+  <figure><div class="thumb big" data-zoom><img src="img/cv-juan-1col.png" alt="CV a una columna"></div>
+    <figcaption><b>Una columna</b><br>Lectura simple de arriba hacia abajo. La más segura para el ATS.</figcaption></figure>
+  <figure><div class="thumb big" data-zoom><img src="img/cv-juan-tabla.png" alt="CV a dos columnas"></div>
+    <figcaption><b>Dos columnas</b><br>Aprovecha la hoja: datos a la izquierda, perfil y experiencia a la derecha.</figcaption></figure>
+</div>
+<p class="zoom-hint">Tocá un CV para verlo en grande.</p>
+</section><section class="screen top" id="s-steps">
+<span class="eyebrow">Paso a paso</span>
+<h2 class="title sm">Cómo armar el CV a dos columnas</h2>
+<div class="tabs" role="tablist">
+  <button class="tab on" data-app="docs" role="tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Google Docs</button>
+  <button class="tab" data-app="word" role="tab"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Word</button>
+</div>
+<div id="app-docs" class="app"><div class="step" data-i="0"><div class="step-text"><span class="step-lab">Para empezar</span><h3>Antes de empezar</h3><p>Se arma con una tabla de 1 fila y 2 columnas. Cada lado queda fijo, elegís el ancho de cada columna y al final se sacan los bordes.</p><div class="tip"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>La línea roja es la tabla. El nombre y el puesto van arriba, fuera de la tabla.</span></div></div><div class="step-shot"><div class="slot real" data-zoom><img src="img/cv-juan-tabla-bordes.png" alt="CV con la tabla marcada en rojo"></div></div></div>
+<div class="step" data-i="1"><div class="step-text"><span class="step-lab">Paso 1 de 6</span><h3>Nombre y puesto</h3><p>Escribí arriba tu nombre y el puesto.</p><div class="tip tip-soft"><span>Van fuera de la tabla.</span></div></div><div class="step-shot"><div class="slot" data-zoom><img src="img/docs-1.png" alt="Captura del paso 1" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 1: nombre y puesto arriba de la hoja"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="36" rx="0" class="sv-bar2"/><text x="16" y="23" class="sv-t">Archivo</text><text x="80" y="23" class="sv-t">Editar</text><text x="136" y="23" class="sv-t">Ver</text><text x="180" y="23" class="sv-t">Insertar</text><text x="252" y="23" class="sv-t">Formato</text><text x="326" y="23" class="sv-t">Herramientas</text><rect x="16" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="48" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="80" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="128" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="160" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="192" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="240" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="272" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="304" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="336" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="368" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="400" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="100" y="170" width="360" height="140" rx="0" class="sv-dash"/><text x="280" y="246" class="sv-t" text-anchor="middle">Acá va la tabla</text><circle cx="478" cy="130" r="13" class="sv-pin"/><text x="478" y="135" class="sv-pint">1</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="2"><div class="step-text"><span class="step-lab">Paso 2 de 6</span><h3>Insertá la tabla</h3><p>Menú <b>Insertar &gt; Tabla</b>. Marcá 1 fila y 2 columnas.</p></div><div class="step-shot"><div class="slot" data-zoom><img src="img/docs-2.png" alt="Captura del paso 2" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 2: insertar una tabla de 1 fila y 2 columnas"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="36" rx="0" class="sv-bar2"/><text x="16" y="23" class="sv-t">Archivo</text><text x="80" y="23" class="sv-t">Editar</text><text x="136" y="23" class="sv-t">Ver</text><rect x="172" y="6" width="70" height="24" rx="6" class="sv-act"/><text x="180" y="23" class="sv-t sv-tb">Insertar</text><text x="252" y="23" class="sv-t">Formato</text><text x="326" y="23" class="sv-t">Herramientas</text><rect x="16" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="48" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="80" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="128" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="160" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="192" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="240" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="272" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="304" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="336" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="368" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="400" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="176" y="36" width="176" height="104" rx="8" class="sv-menu"/><text x="192" y="62" class="sv-t">Imagen</text><rect x="180" y="70" width="168" height="26" rx="6" class="sv-act"/><text x="192" y="88" class="sv-t sv-tb">Tabla</text><text x="334" y="88" class="sv-t sv-tb">›</text><text x="192" y="118" class="sv-t">Dibujo</text><rect x="352" y="66" width="150" height="126" rx="8" class="sv-menu"/><rect x="366" y="78" width="20" height="18" rx="3" class="sv-cell-on"/><rect x="390" y="78" width="20" height="18" rx="3" class="sv-cell-on"/><rect x="414" y="78" width="20" height="18" rx="3" class="sv-cell"/><rect x="438" y="78" width="20" height="18" rx="3" class="sv-cell"/><rect x="462" y="78" width="20" height="18" rx="3" class="sv-cell"/><rect x="366" y="100" width="20" height="18" rx="3" class="sv-cell"/><rect x="390" y="100" width="20" height="18" rx="3" class="sv-cell"/><rect x="414" y="100" width="20" height="18" rx="3" class="sv-cell"/><rect x="438" y="100" width="20" height="18" rx="3" class="sv-cell"/><rect x="462" y="100" width="20" height="18" rx="3" class="sv-cell"/><rect x="366" y="122" width="20" height="18" rx="3" class="sv-cell"/><rect x="390" y="122" width="20" height="18" rx="3" class="sv-cell"/><rect x="414" y="122" width="20" height="18" rx="3" class="sv-cell"/><rect x="438" y="122" width="20" height="18" rx="3" class="sv-cell"/><rect x="462" y="122" width="20" height="18" rx="3" class="sv-cell"/><rect x="366" y="144" width="20" height="18" rx="3" class="sv-cell"/><rect x="390" y="144" width="20" height="18" rx="3" class="sv-cell"/><rect x="414" y="144" width="20" height="18" rx="3" class="sv-cell"/><rect x="438" y="144" width="20" height="18" rx="3" class="sv-cell"/><rect x="462" y="144" width="20" height="18" rx="3" class="sv-cell"/><text x="366" y="178" class="sv-t sv-tb">1 × 2</text><circle cx="512" cy="72" r="13" class="sv-pin"/><text x="512" y="77" class="sv-pint">2</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="3"><div class="step-text"><span class="step-lab">Paso 3 de 6</span><h3>Ajustá el ancho</h3><p>Arrastrá la línea del medio hacia la izquierda para que esa columna quede más angosta.</p></div><div class="step-shot"><div class="slot" data-zoom><img src="img/docs-3.png" alt="Captura del paso 3" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 3: arrastrar la línea del medio hacia la izquierda"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="36" rx="0" class="sv-bar2"/><text x="16" y="23" class="sv-t">Archivo</text><text x="80" y="23" class="sv-t">Editar</text><text x="136" y="23" class="sv-t">Ver</text><text x="180" y="23" class="sv-t">Insertar</text><text x="252" y="23" class="sv-t">Formato</text><text x="326" y="23" class="sv-t">Herramientas</text><rect x="16" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="48" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="80" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="128" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="160" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="192" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="240" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="272" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="304" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="336" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="368" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="400" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="100" y="170" width="360" height="140" rx="0" class="sv-bon sv-nf"/><line x1="220" y1="170" x2="220" y2="310" class="sv-bon"/><line x1="280" y1="170" x2="280" y2="310" class="sv-ghost"/><line x1="220" y1="170" x2="220" y2="310" class="sv-hlline"/><line x1="230" y1="316" x2="270" y2="316" class="sv-arrow"/><polygon points="224,316 233,311 233,321" class="sv-arrowh"/><polygon points="276,316 267,311 267,321" class="sv-arrowh"/><text x="280" y="326" class="sv-t"></text><circle cx="220" cy="160" r="13" class="sv-pin"/><text x="220" y="165" class="sv-pint">3</text><text x="300" y="154" class="sv-t sv-tb">Arrastrá la línea del medio</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="4"><div class="step-text"><span class="step-lab">Paso 4 de 6</span><h3>Escribí el contenido</h3><p><b>Izquierda:</b> contacto, educación, herramientas, cursos e idiomas.<br><b>Derecha:</b> perfil y experiencia.</p></div><div class="step-shot"><div class="slot" data-zoom><img src="img/docs-4.png" alt="Captura del paso 4" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 4: escribir el contenido en cada columna"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="36" rx="0" class="sv-bar2"/><text x="16" y="23" class="sv-t">Archivo</text><text x="80" y="23" class="sv-t">Editar</text><text x="136" y="23" class="sv-t">Ver</text><text x="180" y="23" class="sv-t">Insertar</text><text x="252" y="23" class="sv-t">Formato</text><text x="326" y="23" class="sv-t">Herramientas</text><rect x="16" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="48" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="80" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="128" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="160" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="192" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="240" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="272" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="304" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="336" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="368" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="400" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><text x="108" y="185" class="sv-h">CONTACTO</text><rect x="108" y="192" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="200" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="230" class="sv-h">EDUCACIÓN</text><rect x="108" y="237" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="245" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="275" class="sv-h">HERRAMIENTAS</text><rect x="108" y="282" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="290" width="88" height="4" rx="2" class="sv-line"/><text x="230" y="185" class="sv-h">PERFIL</text><rect x="230" y="192" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="200" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="208" width="212" height="4" rx="2" class="sv-line"/><text x="230" y="241" class="sv-h">EXPERIENCIA</text><rect x="230" y="248" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="256" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="264" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="272" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="280" width="212" height="4" rx="2" class="sv-line"/><rect x="100" y="170" width="360" height="140" rx="0" class="sv-bon sv-nf"/><line x1="220" y1="170" x2="220" y2="310" class="sv-bon"/><circle cx="478" cy="172" r="13" class="sv-pin"/><text x="478" y="177" class="sv-pint">4</text><text x="104" y="322" class="sv-t">Izquierda: datos</text><text x="300" y="322" class="sv-t">Derecha: perfil y experiencia</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="5"><div class="step-text"><span class="step-lab">Paso 5 de 6</span><h3>Pintá la columna izquierda</h3><p>Hacé clic en la celda de la izquierda y usá el botón <b>Color de fondo</b> de la barra de herramientas.</p></div><div class="step-shot"><div class="slot" data-zoom><img src="img/docs-5.png" alt="Captura del paso 5" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 5: pintar la columna izquierda"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="36" rx="0" class="sv-bar2"/><text x="16" y="23" class="sv-t">Archivo</text><text x="80" y="23" class="sv-t">Editar</text><text x="136" y="23" class="sv-t">Ver</text><text x="180" y="23" class="sv-t">Insertar</text><text x="252" y="23" class="sv-t">Formato</text><text x="326" y="23" class="sv-t">Herramientas</text><rect x="16" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="48" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="80" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="128" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="160" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="192" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="240" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="272" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="304" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="336" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="368" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="400" y="45" width="20" height="20" rx="5" class="sv-ico"/><rect x="332" y="41" width="28" height="28" rx="7" class="sv-hl"/><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="100" y="170" width="120" height="140" rx="0" class="sv-shade"/><text x="108" y="185" class="sv-h">CONTACTO</text><rect x="108" y="192" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="200" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="230" class="sv-h">EDUCACIÓN</text><rect x="108" y="237" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="245" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="275" class="sv-h">HERRAMIENTAS</text><rect x="108" y="282" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="290" width="88" height="4" rx="2" class="sv-line"/><text x="230" y="185" class="sv-h">PERFIL</text><rect x="230" y="192" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="200" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="208" width="212" height="4" rx="2" class="sv-line"/><text x="230" y="241" class="sv-h">EXPERIENCIA</text><rect x="230" y="248" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="256" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="264" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="272" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="280" width="212" height="4" rx="2" class="sv-line"/><rect x="100" y="170" width="360" height="140" rx="0" class="sv-bon sv-nf"/><line x1="220" y1="170" x2="220" y2="310" class="sv-bon"/><rect x="300" y="74" width="130" height="24" rx="6" class="sv-tip"/><text x="365" y="91" class="sv-tipt" text-anchor="middle">Color de fondo</text><circle cx="448" cy="60" r="13" class="sv-pin"/><text x="448" y="65" class="sv-pint">5</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="6"><div class="step-text"><span class="step-lab">Paso 6 de 6</span><h3>Sacá los bordes</h3><p>Menú <b>Formato &gt; Tabla &gt; Opciones de la tabla</b>. En el borde de la tabla, poné el grosor en <b>0 pt</b>.</p></div><div class="step-shot"><div class="slot" data-zoom><img src="img/docs-6.png" alt="Captura del paso 6" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 6: sacar los bordes de la tabla"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="36" rx="0" class="sv-bar2"/><text x="16" y="23" class="sv-t">Archivo</text><text x="80" y="23" class="sv-t">Editar</text><text x="136" y="23" class="sv-t">Ver</text><text x="180" y="23" class="sv-t">Insertar</text><rect x="244" y="6" width="72" height="24" rx="6" class="sv-act"/><text x="252" y="23" class="sv-t sv-tb">Formato</text><text x="326" y="23" class="sv-t">Herramientas</text><text x="16" y="59" class="sv-crumb">Formato  ›  Tabla  ›  Opciones de la tabla</text><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="100" y="170" width="120" height="140" rx="0" class="sv-shade"/><text x="108" y="185" class="sv-h">CONTACTO</text><rect x="108" y="192" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="200" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="230" class="sv-h">EDUCACIÓN</text><rect x="108" y="237" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="245" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="275" class="sv-h">HERRAMIENTAS</text><rect x="108" y="282" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="290" width="88" height="4" rx="2" class="sv-line"/><text x="230" y="185" class="sv-h">PERFIL</text><rect x="230" y="192" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="200" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="208" width="212" height="4" rx="2" class="sv-line"/><text x="230" y="241" class="sv-h">EXPERIENCIA</text><rect x="230" y="248" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="256" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="264" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="272" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="280" width="212" height="4" rx="2" class="sv-line"/><rect x="100" y="170" width="360" height="140" rx="0" class="sv-boff sv-nf"/><line x1="220" y1="170" x2="220" y2="310" class="sv-boff"/><rect x="330" y="80" width="222" height="240" rx="10" class="sv-panel"/><text x="346" y="106" class="sv-t sv-tb">Opciones de la tabla</text><text x="346" y="140" class="sv-t">Borde de la tabla</text><text x="346" y="172" class="sv-t">Grosor</text><rect x="448" y="154" width="84" height="26" rx="6" class="sv-input"/><rect x="448" y="154" width="84" height="26" rx="6" class="sv-hl"/><text x="490" y="172" class="sv-t sv-tb" text-anchor="middle">0 pt</text><text x="346" y="208" class="sv-t">Color</text><rect x="448" y="190" width="84" height="26" rx="6" class="sv-input"/><rect x="446" y="280" width="86" height="28" rx="8" class="sv-btn"/><text x="489" y="299" class="sv-btn-t" text-anchor="middle">Aceptar</text><circle cx="542" cy="150" r="13" class="sv-pin"/><text x="542" y="155" class="sv-pint">6</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="7"><div class="step-text"><span class="step-lab">Resultado</span><h3>Listo</h3><p>El CV queda sin bordes y en una sola hoja. Para enviarlo: <b>Archivo &gt; Descargar &gt; PDF</b>.</p><div class="tip tip-soft"><span>Así se ve terminado.</span></div></div><div class="step-shot"><div class="slot real" data-zoom><img src="img/cv-juan-tabla.png" alt="CV a dos columnas terminado"></div></div></div></div>
+<div id="app-word" class="app" hidden><div class="step" data-i="0"><div class="step-text"><span class="step-lab">Para empezar</span><h3>Antes de empezar</h3><p>Se arma con una tabla de 1 fila y 2 columnas. Cada lado queda fijo, elegís el ancho de cada columna y al final se sacan los bordes.</p><div class="tip"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>La línea roja es la tabla. El nombre y el puesto van arriba, fuera de la tabla.</span></div></div><div class="step-shot"><div class="slot real" data-zoom><img src="img/cv-juan-tabla-bordes.png" alt="CV con la tabla marcada en rojo"></div></div></div>
+<div class="step" data-i="1"><div class="step-text"><span class="step-lab">Paso 1 de 6</span><h3>Nombre y puesto</h3><p>Escribí arriba tu nombre y el puesto.</p><div class="tip tip-soft"><span>Van fuera de la tabla.</span></div></div><div class="step-shot"><div class="slot" data-zoom><img src="img/word-1.png" alt="Captura del paso 1" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 1: nombre y puesto arriba de la hoja"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="56" rx="0" class="sv-rib"/><text x="16" y="23" class="sv-t">Archivo</text><rect x="78" y="6" width="56" height="24" rx="6" class="sv-act"/><text x="86" y="23" class="sv-t sv-tb">Inicio</text><text x="144" y="23" class="sv-t">Insertar</text><text x="216" y="23" class="sv-t sv-ctx">Diseño de tabla</text><text x="344" y="23" class="sv-t sv-ctx">Disposición</text><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="100" y="170" width="360" height="140" rx="0" class="sv-dash"/><text x="280" y="246" class="sv-t" text-anchor="middle">Acá va la tabla</text><circle cx="478" cy="130" r="13" class="sv-pin"/><text x="478" y="135" class="sv-pint">1</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="2"><div class="step-text"><span class="step-lab">Paso 2 de 6</span><h3>Insertá la tabla</h3><p>Pestaña <b>Insertar &gt; Tabla</b>. Marcá 2 columnas y 1 fila en la cuadrícula.</p></div><div class="step-shot"><div class="slot" data-zoom><img src="img/word-2.png" alt="Captura del paso 2" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 2: insertar una tabla de 1 fila y 2 columnas"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="56" rx="0" class="sv-rib"/><text x="16" y="23" class="sv-t">Archivo</text><text x="86" y="23" class="sv-t">Inicio</text><rect x="136" y="6" width="70" height="24" rx="6" class="sv-act"/><text x="144" y="23" class="sv-t sv-tb">Insertar</text><text x="216" y="23" class="sv-t sv-ctx">Diseño de tabla</text><text x="344" y="23" class="sv-t sv-ctx">Disposición</text><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="150" y="42" width="62" height="46" rx="8" class="sv-act"/><rect x="168" y="46" width="26" height="20" rx="4" class="sv-ico"/><text x="181" y="80" class="sv-t sv-tb" text-anchor="middle">Tabla</text><rect x="140" y="92" width="176" height="126" rx="8" class="sv-menu"/><rect x="154" y="104" width="20" height="18" rx="3" class="sv-cell-on"/><rect x="178" y="104" width="20" height="18" rx="3" class="sv-cell-on"/><rect x="202" y="104" width="20" height="18" rx="3" class="sv-cell"/><rect x="226" y="104" width="20" height="18" rx="3" class="sv-cell"/><rect x="250" y="104" width="20" height="18" rx="3" class="sv-cell"/><rect x="154" y="126" width="20" height="18" rx="3" class="sv-cell"/><rect x="178" y="126" width="20" height="18" rx="3" class="sv-cell"/><rect x="202" y="126" width="20" height="18" rx="3" class="sv-cell"/><rect x="226" y="126" width="20" height="18" rx="3" class="sv-cell"/><rect x="250" y="126" width="20" height="18" rx="3" class="sv-cell"/><rect x="154" y="148" width="20" height="18" rx="3" class="sv-cell"/><rect x="178" y="148" width="20" height="18" rx="3" class="sv-cell"/><rect x="202" y="148" width="20" height="18" rx="3" class="sv-cell"/><rect x="226" y="148" width="20" height="18" rx="3" class="sv-cell"/><rect x="250" y="148" width="20" height="18" rx="3" class="sv-cell"/><rect x="154" y="170" width="20" height="18" rx="3" class="sv-cell"/><rect x="178" y="170" width="20" height="18" rx="3" class="sv-cell"/><rect x="202" y="170" width="20" height="18" rx="3" class="sv-cell"/><rect x="226" y="170" width="20" height="18" rx="3" class="sv-cell"/><rect x="250" y="170" width="20" height="18" rx="3" class="sv-cell"/><text x="154" y="204" class="sv-t sv-tb">2 columnas × 1 fila</text><circle cx="330" cy="104" r="13" class="sv-pin"/><text x="330" y="109" class="sv-pint">2</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="3"><div class="step-text"><span class="step-lab">Paso 3 de 6</span><h3>Ajustá el ancho</h3><p>Arrastrá la línea del medio hacia la izquierda para que esa columna quede más angosta.</p></div><div class="step-shot"><div class="slot" data-zoom><img src="img/word-3.png" alt="Captura del paso 3" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 3: arrastrar la línea del medio hacia la izquierda"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="56" rx="0" class="sv-rib"/><text x="16" y="23" class="sv-t">Archivo</text><rect x="78" y="6" width="56" height="24" rx="6" class="sv-act"/><text x="86" y="23" class="sv-t sv-tb">Inicio</text><text x="144" y="23" class="sv-t">Insertar</text><text x="216" y="23" class="sv-t sv-ctx">Diseño de tabla</text><text x="344" y="23" class="sv-t sv-ctx">Disposición</text><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="100" y="170" width="360" height="140" rx="0" class="sv-bon sv-nf"/><line x1="220" y1="170" x2="220" y2="310" class="sv-bon"/><line x1="280" y1="170" x2="280" y2="310" class="sv-ghost"/><line x1="220" y1="170" x2="220" y2="310" class="sv-hlline"/><line x1="230" y1="316" x2="270" y2="316" class="sv-arrow"/><polygon points="224,316 233,311 233,321" class="sv-arrowh"/><polygon points="276,316 267,311 267,321" class="sv-arrowh"/><text x="280" y="326" class="sv-t"></text><circle cx="220" cy="160" r="13" class="sv-pin"/><text x="220" y="165" class="sv-pint">3</text><text x="300" y="154" class="sv-t sv-tb">Arrastrá la línea del medio</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="4"><div class="step-text"><span class="step-lab">Paso 4 de 6</span><h3>Escribí el contenido</h3><p><b>Izquierda:</b> contacto, educación, herramientas, cursos e idiomas.<br><b>Derecha:</b> perfil y experiencia.</p></div><div class="step-shot"><div class="slot" data-zoom><img src="img/word-4.png" alt="Captura del paso 4" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 4: escribir el contenido en cada columna"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="56" rx="0" class="sv-rib"/><text x="16" y="23" class="sv-t">Archivo</text><rect x="78" y="6" width="56" height="24" rx="6" class="sv-act"/><text x="86" y="23" class="sv-t sv-tb">Inicio</text><text x="144" y="23" class="sv-t">Insertar</text><text x="216" y="23" class="sv-t sv-ctx">Diseño de tabla</text><text x="344" y="23" class="sv-t sv-ctx">Disposición</text><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><text x="108" y="185" class="sv-h">CONTACTO</text><rect x="108" y="192" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="200" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="230" class="sv-h">EDUCACIÓN</text><rect x="108" y="237" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="245" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="275" class="sv-h">HERRAMIENTAS</text><rect x="108" y="282" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="290" width="88" height="4" rx="2" class="sv-line"/><text x="230" y="185" class="sv-h">PERFIL</text><rect x="230" y="192" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="200" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="208" width="212" height="4" rx="2" class="sv-line"/><text x="230" y="241" class="sv-h">EXPERIENCIA</text><rect x="230" y="248" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="256" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="264" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="272" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="280" width="212" height="4" rx="2" class="sv-line"/><rect x="100" y="170" width="360" height="140" rx="0" class="sv-bon sv-nf"/><line x1="220" y1="170" x2="220" y2="310" class="sv-bon"/><circle cx="478" cy="172" r="13" class="sv-pin"/><text x="478" y="177" class="sv-pint">4</text><text x="104" y="322" class="sv-t">Izquierda: datos</text><text x="300" y="322" class="sv-t">Derecha: perfil y experiencia</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="5"><div class="step-text"><span class="step-lab">Paso 5 de 6</span><h3>Pintá la columna izquierda</h3><p>Hacé clic en la celda de la izquierda. En la pestaña <b>Diseño de tabla</b>, usá <b>Sombreado</b>.</p></div><div class="step-shot"><div class="slot" data-zoom><img src="img/word-5.png" alt="Captura del paso 5" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 5: pintar la columna izquierda"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="56" rx="0" class="sv-rib"/><text x="16" y="23" class="sv-t">Archivo</text><text x="86" y="23" class="sv-t">Inicio</text><text x="144" y="23" class="sv-t">Insertar</text><rect x="208" y="6" width="126" height="24" rx="6" class="sv-act"/><text x="216" y="23" class="sv-t sv-ctx sv-tb">Diseño de tabla</text><text x="344" y="23" class="sv-t sv-ctx">Disposición</text><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="100" y="170" width="120" height="140" rx="0" class="sv-shade"/><text x="108" y="185" class="sv-h">CONTACTO</text><rect x="108" y="192" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="200" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="230" class="sv-h">EDUCACIÓN</text><rect x="108" y="237" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="245" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="275" class="sv-h">HERRAMIENTAS</text><rect x="108" y="282" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="290" width="88" height="4" rx="2" class="sv-line"/><text x="230" y="185" class="sv-h">PERFIL</text><rect x="230" y="192" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="200" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="208" width="212" height="4" rx="2" class="sv-line"/><text x="230" y="241" class="sv-h">EXPERIENCIA</text><rect x="230" y="248" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="256" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="264" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="272" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="280" width="212" height="4" rx="2" class="sv-line"/><rect x="100" y="170" width="360" height="140" rx="0" class="sv-bon sv-nf"/><line x1="220" y1="170" x2="220" y2="310" class="sv-bon"/><rect x="176" y="42" width="70" height="46" rx="8" class="sv-act"/><rect x="198" y="46" width="26" height="20" rx="4" class="sv-ico"/><text x="211" y="80" class="sv-t sv-tb" text-anchor="middle">Sombreado</text><rect x="262" y="42" width="54" height="46" rx="8" class="sv-ribbtn"/><text x="289" y="80" class="sv-t" text-anchor="middle">Bordes</text><circle cx="262" cy="44" r="13" class="sv-pin"/><text x="262" y="49" class="sv-pint">5</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="6"><div class="step-text"><span class="step-lab">Paso 6 de 6</span><h3>Sacá los bordes</h3><p>Hacé clic en la tabla. En la pestaña <b>Diseño de tabla</b>, abrí la flecha de <b>Bordes</b> y elegí <b>Sin borde</b>.</p><div class="tip"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Elegí Bordes, no Estilos de borde.</span></div></div><div class="step-shot"><div class="slot" data-zoom><img src="img/word-6.png" alt="Captura del paso 6" onerror="this.remove()"><div class="schem"><svg viewBox="0 0 560 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Paso 6: sacar los bordes de la tabla"><rect x="0" y="0" width="560" height="330" rx="12" class="sv-bg"/><rect x="0" y="0" width="560" height="36" rx="0" class="sv-bar"/><rect x="0" y="36" width="560" height="56" rx="0" class="sv-rib"/><text x="16" y="23" class="sv-t">Archivo</text><text x="86" y="23" class="sv-t">Inicio</text><text x="144" y="23" class="sv-t">Insertar</text><rect x="208" y="6" width="126" height="24" rx="6" class="sv-act"/><text x="216" y="23" class="sv-t sv-ctx sv-tb">Diseño de tabla</text><text x="344" y="23" class="sv-t sv-ctx">Disposición</text><rect x="80" y="104" width="400" height="260" rx="0" class="sv-page"/><text x="100" y="138" class="sv-name">NOMBRE APELLIDO</text><text x="100" y="157" class="sv-sub">Puesto o perfil</text><rect x="100" y="170" width="120" height="140" rx="0" class="sv-shade"/><text x="108" y="185" class="sv-h">CONTACTO</text><rect x="108" y="192" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="200" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="230" class="sv-h">EDUCACIÓN</text><rect x="108" y="237" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="245" width="88" height="4" rx="2" class="sv-line"/><text x="108" y="275" class="sv-h">HERRAMIENTAS</text><rect x="108" y="282" width="98" height="4" rx="2" class="sv-line"/><rect x="108" y="290" width="88" height="4" rx="2" class="sv-line"/><text x="230" y="185" class="sv-h">PERFIL</text><rect x="230" y="192" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="200" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="208" width="212" height="4" rx="2" class="sv-line"/><text x="230" y="241" class="sv-h">EXPERIENCIA</text><rect x="230" y="248" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="256" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="264" width="212" height="4" rx="2" class="sv-line"/><rect x="230" y="272" width="182" height="4" rx="2" class="sv-line"/><rect x="230" y="280" width="212" height="4" rx="2" class="sv-line"/><rect x="100" y="170" width="360" height="140" rx="0" class="sv-boff sv-nf"/><line x1="220" y1="170" x2="220" y2="310" class="sv-boff"/><rect x="250" y="42" width="70" height="46" rx="8" class="sv-act"/><text x="285" y="80" class="sv-t sv-tb" text-anchor="middle">Bordes ▾</text><rect x="240" y="92" width="184" height="156" rx="8" class="sv-menu"/><text x="256" y="116" class="sv-t">Borde inferior</text><text x="256" y="144" class="sv-t">Borde superior</text><text x="256" y="172" class="sv-t">Borde izquierdo</text><rect x="244" y="182" width="176" height="26" rx="6" class="sv-act"/><text x="256" y="200" class="sv-t sv-tb">Sin borde</text><text x="256" y="228" class="sv-t">Todos los bordes</text><circle cx="432" cy="168" r="13" class="sv-pin"/><text x="432" y="173" class="sv-pint">6</text></svg><span class="shot-cap">Esquema del paso. Los nombres exactos pueden variar un poco según la versión.</span></div></div></div></div>
+<div class="step" data-i="7"><div class="step-text"><span class="step-lab">Resultado</span><h3>Listo</h3><p>El CV queda sin bordes. Revisá que entre en una sola hoja.</p><div class="tip tip-soft"><span>Así se ve terminado.</span></div></div><div class="step-shot"><div class="slot real" data-zoom><img src="img/cv-juan-tabla.png" alt="CV a dos columnas terminado"></div></div></div></div>
+<div class="dots" id="dots"></div>
+<p class="src-note">Menús verificados en la ayuda oficial:
+ <a href="https://support.google.com/docs/answer/1696711?hl=es" target="_blank" rel="noopener">Google Docs</a> ·
+ <a href="https://support.microsoft.com/es-es/office/insertar-una-tabla-a138f745-73ef-4879-b99a-2f3d38be612a" target="_blank" rel="noopener">Word, insertar tabla</a> ·
+ <a href="https://support.microsoft.com/es-es/word/remove-borders-from-a-table-in-word-for-mac" target="_blank" rel="noopener">Word, quitar bordes</a></p>
+</section><section class="screen top" id="s10">
+<span class="eyebrow">Modelos</span>
+<h2 class="title">Cuatro modelos para copiar</h2>
+<p class="subtitle sm">Tocá cada CV para verlo en grande.</p>
+<div class="models">
+  <div class="model"><div class="model-h"><b>Juan Pérez</b><span>Sin experiencia laboral</span></div><div class="pair"><figure><div class="thumb" data-zoom><img src="img/cv-juan-1col.png" alt="Juan Pérez, una columna"></div><figcaption>Una columna</figcaption></figure><figure><div class="thumb" data-zoom><img src="img/cv-juan-tabla.png" alt="Juan Pérez, dos columnas"></div><figcaption>Dos columnas</figcaption></figure></div></div>
+  <div class="model"><div class="model-h"><b>Claudia Romero</b><span>Ventas y atención al público</span></div><div class="pair"><figure><div class="thumb" data-zoom><img src="img/cv-claudia-1col.png" alt="Claudia Romero, una columna"></div><figcaption>Una columna</figcaption></figure><figure><div class="thumb" data-zoom><img src="img/cv-claudia-tabla.png" alt="Claudia Romero, dos columnas"></div><figcaption>Dos columnas</figcaption></figure></div></div>
+  <div class="model"><div class="model-h"><b>Marcelo Duarte</b><span>Administrativo</span></div><div class="pair"><figure><div class="thumb" data-zoom><img src="img/cv-marcelo-1col.png" alt="Marcelo Duarte, una columna"></div><figcaption>Una columna</figcaption></figure><figure><div class="thumb" data-zoom><img src="img/cv-marcelo-tabla.png" alt="Marcelo Duarte, dos columnas"></div><figcaption>Dos columnas</figcaption></figure></div></div>
+  <div class="model"><div class="model-h"><b>Ricardo Sosa</b><span>Oficio</span></div><div class="pair"><figure><div class="thumb" data-zoom><img src="img/cv-ricardo-1col.png" alt="Ricardo Sosa, una columna"></div><figcaption>Una columna</figcaption></figure><figure><div class="thumb" data-zoom><img src="img/cv-ricardo-tabla.png" alt="Ricardo Sosa, dos columnas"></div><figcaption>Dos columnas</figcaption></figure></div></div>
+</div>
+<p class="check-label">Antes de enviarlo</p>
+<div class="chips">
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Una sola hoja</span>
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Ortografía revisada</span>
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Sin datos de más</span>
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Mail con tu nombre</span>
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Guardado en PDF</span>
+</div>
+</section><section class="screen top" id="s-a">
+<span class="eyebrow annex">Anexo A</span>
+<h2 class="title sm">La foto del CV</h2>
+<div class="highlight-box highlight-small" style="margin-top:0">Va solo si el aviso la pide. Arriba de la columna izquierda.</div>
+<div class="annex-row">
+  <div>
+    <div class="comparison-grid one">
+      <div class="compare-card"><div class="compare-label label-blue">Una buena foto</div><div class="compare-content"><ul class="mini-list">
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Fondo simple.</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Buena luz, de frente.</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>De los hombros para arriba.</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg><span>Ropa prolija y actitud natural.</span></li>
+      </ul></div></div>
+      <div class="compare-card"><div class="compare-label label-gray">Evitá</div><div class="compare-content"><ul class="mini-list">
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Filtros exagerados y edición excesiva.</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Fotos oscuras o fondos desordenados.</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><span>Selfies informales o recortes de fotos grupales.</span></li>
+      </ul></div></div>
+    </div>
+    <p class="src-note">Con IA se puede quitar el fondo y ajustar luz y colores. Sirve para pulir la foto, no para crear una versión falsa de vos. En Docs: <b>Insertar &gt; Imagen &gt; Subir del ordenador</b>.</p>
+  </div>
+  <div class="two-shots tiny">
+    <figure><div class="thumb" data-zoom><img src="img/cv-juan-1col-foto.png" alt="CV con foto, una columna"></div><figcaption>Con foto</figcaption></figure>
+    <figure><div class="thumb" data-zoom><img src="img/cv-juan-tabla-foto.png" alt="CV con foto, dos columnas"></div><figcaption>Con foto</figcaption></figure>
+  </div>
+</div>
+</section><section class="screen top" id="s-b">
+<span class="eyebrow annex">Anexo B</span>
+<h2 class="title">Tu perfil online</h2>
+<p class="subtitle sm">Lo que ve quien busca tu nombre.</p>
+<div class="parts-grid two">
+  <div class="part-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div><div><h3>Correo profesional</h3><p>Formato nombre.apellido, sin apodos.</p></div></div>
+  <div class="part-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><h3>Nombre real</h3><p>En las redes públicas vinculadas a tu búsqueda laboral.</p></div></div>
+  <div class="part-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div><h3>Foto coherente</h3><p>Prolija, en las plataformas de trabajo.</p></div></div>
+  <div class="part-card"><div class="icon-box "><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><div><h3>LinkedIn básico</h3><p>Recomendable si es relevante para tu rubro. <a href="https://facu2434.github.io/Geniso/intro.html" target="_blank" rel="noopener">Ver la clase</a>.</p></div></div>
+</div>
+</section><section class="screen top" id="s-c">
+<span class="eyebrow annex">Anexo C</span>
+<h2 class="title">La carta de presentación</h2>
+<p class="subtitle sm">Acompaña al CV cuando lo enviás.</p>
+<ol class="step-list">
+  <li><span>Lugar y fecha, a la derecha.</span></li>
+  <li><span>Destinatario.</span></li>
+  <li><span>Tres párrafos cortos: el puesto, tu experiencia y el CV adjunto.</span></li>
+  <li><span>Saludo, nombre, teléfono y mail.</span></li>
+</ol>
+</section><section class="screen top" id="s-d">
+<span class="eyebrow annex">Anexo D</span>
+<h2 class="title">Mejorar el CV con IA</h2>
+<p class="subtitle sm">Gemini, ChatGPT o Claude pueden revisarlo y armar dos versiones.</p>
+<ol class="step-list compact">
+  <li><span>Subí tu CV a la IA.</span></li>
+  <li><span>Respondé sus preguntas con datos reales.</span></li>
+  <li><span>Pedile una versión de una columna y otra de dos.</span></li>
+  <li><span>Revisá el resultado antes de entregarlo.</span></li>
+</ol>
+<p class="check-label">Revisá que</p>
+<div class="chips">
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Los datos sean correctos</span>
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> No haya nada inventado</span>
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> No sobren palabras vacías</span>
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> No falte contenido</span>
+  <span class="chip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg> Entre en una hoja</span>
+</div>
+</section>
+  <div class="nav-bar">
+    <button class="btn btn-prev" id="prev"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Anterior</button>
+    <span class="step-counter" id="counter"></span>
+    <button class="btn btn-next" id="next">Siguiente <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+  </div>
+  <footer class="pie">Taller El Profe · servicio técnico de computadoras, desbloqueo de equipos · <a href="https://linktr.ee/Taller_El_Profe" target="_blank" rel="noopener">linktr.ee/Taller_El_Profe</a></footer>
+</div>
+<div class="lightbox" id="lb"><div class="shot"><img alt=""></div></div>
+<script>
+(function () {
+  var screens = Array.prototype.slice.call(document.querySelectorAll('.screen'));
+  var total = screens.length;
+  var stepScreen = document.getElementById('s-steps');
+  var panels = { docs: document.getElementById('app-docs'), word: document.getElementById('app-word') };
+  var nSub = panels.docs.querySelectorAll('.step').length;
+  var counter = document.getElementById('counter');
+  var prev = document.getElementById('prev');
+  var next = document.getElementById('next');
+  var dotsBox = document.getElementById('dots');
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var cur = 0, sub = 0, app = 'docs';
+
+  for (var d = 0; d < nSub; d++) {
+    var b = document.createElement('button');
+    b.className = 'dot';
+    b.setAttribute('aria-label', 'Ir al paso ' + d);
+    b.dataset.i = d;
+    dotsBox.appendChild(b);
+  }
+
+  function render() {
+    screens.forEach(function (s, i) { s.classList.toggle('active', i === cur); });
+    var isSteps = screens[cur] === stepScreen;
+    if (isSteps) {
+      ['docs', 'word'].forEach(function (k) {
+        panels[k].hidden = (k !== app);
+        Array.prototype.forEach.call(panels[k].querySelectorAll('.step'), function (el, i) {
+          el.classList.toggle('on', i === sub);
+        });
+      });
+      tabs.forEach(function (t) { t.classList.toggle('on', t.dataset.app === app); });
+      Array.prototype.forEach.call(dotsBox.children, function (el, i) { el.classList.toggle('on', i === sub); });
+    }
+    counter.textContent = (cur + 1) + ' / ' + total;
+    prev.disabled = (cur === 0);
+    next.disabled = (cur === total - 1 && (!isSteps || sub === nSub - 1)) || (cur === total - 1);
+    try {
+      history.replaceState(null, '', '#' + (cur + 1) + (isSteps ? '.' + sub + (app === 'word' ? 'w' : '') : ''));
+    } catch (e) {}
+    screens[cur].scrollTop = 0;
+  }
+
+  function go(dir) {
+    var isSteps = screens[cur] === stepScreen;
+    if (dir > 0) {
+      if (isSteps && sub < nSub - 1) { sub++; }
+      else if (cur < total - 1) { cur++; sub = 0; }
+    } else {
+      if (isSteps && sub > 0) { sub--; }
+      else if (cur > 0) { cur--; if (screens[cur] === stepScreen) { sub = nSub - 1; } }
+    }
+    render();
+  }
+
+  prev.addEventListener('click', function () { go(-1); });
+  next.addEventListener('click', function () { go(1); });
+  tabs.forEach(function (t) { t.addEventListener('click', function () { app = t.dataset.app; render(); }); });
+  dotsBox.addEventListener('click', function (e) {
+    var t = e.target.closest('.dot');
+    if (t) { sub = parseInt(t.dataset.i, 10); render(); }
+  });
+
+  var lb = document.getElementById('lb');
+  var lbImg = lb.querySelector('img');
+  document.addEventListener('click', function (e) {
+    if (lb.classList.contains('open')) { lb.classList.remove('open'); return; }
+    var z = e.target.closest('[data-zoom]');
+    if (!z) return;
+    var img = z.querySelector('img');
+    if (!img) return;
+    lbImg.src = img.src;
+    lbImg.alt = img.alt;
+    lb.classList.add('open');
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { lb.classList.remove('open'); return; }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { go(1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { go(-1); }
+  });
+
+  var m = /^#(\d+)(?:\.(\d+))?(w)?$/.exec(location.hash);
+  if (m) {
+    var n = parseInt(m[1], 10) - 1;
+    if (n >= 0 && n < total) { cur = n; }
+    if (m[2] && screens[cur] === stepScreen) { sub = Math.min(parseInt(m[2], 10), nSub - 1); }
+    if (m[3]) { app = 'word'; }
+  }
+  render();
+})();
+
+</script>
+</body>
+</html>
