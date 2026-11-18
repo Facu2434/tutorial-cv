@@ -22,7 +22,7 @@ En GitHub: Settings > Pages > Deploy from a branch > `main` / `(root)`.
 
 ## Capturas reales del paso a paso
 
-La pantalla 9 muestra un esquema de cada paso. Si existe una captura con el nombre de abajo dentro de `img/`, se muestra en lugar del esquema, sin tocar el HTML:
+La pantalla 9 usa capturas reales de Google Docs y de Word para la web (CV de ejemplo de Juan Pérez, noviembre 2026). Si una captura falta, se muestra un esquema dibujado en su lugar. Para reemplazar una, guardá la nueva con el mismo nombre dentro de `img/`, sin tocar el HTML:
 
 - Google Docs: `img/docs-1.png` a `img/docs-6.png`
 - Word: `img/word-1.png` a `img/word-6.png`
